@@ -13,7 +13,8 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     temp = request.remote_addr
-    return temp
+    value = f'ma strigngng  {temp}'
+    return value
 
 
 @cache.cached(timeout=int(os.getenv("CACHE_TIME")), key_prefix="generateTemplate")
