@@ -4,6 +4,7 @@ import random
 from app.main import cache
 import os
 from dotenv import load_dotenv
+from flask import request
 load_dotenv()
 
 main = Blueprint('main', __name__)
@@ -11,7 +12,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    temp = "helloo"
+    temp = request.remote_addr
     return temp
 
 
