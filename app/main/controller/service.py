@@ -15,7 +15,7 @@ load_dotenv()
 
 main = Blueprint('main', __name__)
 
-path = os.getcwd() + "//gioipDatabase//GeoLite2-Country.mmdb"
+path = os.getcwd() + "/gioipDatabase/GeoLite2-Country.mmdb"
 
 
 @main.route('/')
