@@ -1,24 +1,60 @@
+import json
 from app.main.config import Config
 from flask import Blueprint, render_template
 import random
 from app.main import cache
 import os
 from dotenv import load_dotenv
-from flask import request
+from flask import request, jsonify
+import os
+import requests
+import pygeoip
+import random
+import geoip2.database as geoip
 load_dotenv()
 
 main = Blueprint('main', __name__)
+
+path = os.getcwd() + "//gioipDatabase//GeoLite2-Country.mmdb"
 
 
 @main.route('/')
 def index():
     temp = request.remote_addr
+    jj = request.headers
+    # man = gi.country_name_by_addr('106.210.129.209')
+    response = requests.get(
+        "http://ip-api.com/json/{}".format('106.210.129.209'))
+    js = response.json()
+    reader = geoip.Reader(path)
+    try:
+        country = reader.country(temp)
+    except Exception as e:
+        country = " the error constyr"
+        return(country)
+        print("indiad")
+    # print(man)
+    name = country.country.names['en']
     value = f'ma strigngng  {temp}'
-    return value
+
+    l = ['india', 'us']
+    random.shuffle(l)
+    print(l[-1])
+    print(type(country))
+    # print(jsonify(country))
+    val = country.country
+    # print(jsonify(val))
+    val = country.country.names['en']
+
+    # value = GenerateTemplate(l[-1])
+    # print(value)
+    return val + "     the location whixh user come"
 
 
-@cache.cached(timeout=int(os.getenv("CACHE_TIME")), key_prefix="generateTemplate")
-def GenerateTemplate():
+# @cache.cached(timeout=int(os.getenv("CACHE_TIME")), key_prefix="generateTemplate")
+@cache.memoize(timeout=100)
+def GenerateTemplate(name):
+    return name
     bucket_obj = Config.bucket
     filename = [filename.name for filename in list(
         bucket_obj.list_blobs(prefix=''))]
